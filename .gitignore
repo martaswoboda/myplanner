@@ -1,0 +1,31 @@
+# Ignore virtual environments
+myenv/
+venv/
+*.pyc
+__pycache__/
+
+# Ignore system files
+*.log
+*.dat
+*.ini
+AppData/
+NTUSER.DAT*
+OneDrive/
+Desktop/
+Documents/
+Downloads/
+Favorites/
+Links/
+Pictures/
+Saved Games/
+Searches/
+Videos/
+
+# Ignore node_modules and any package manager specific files
+node_modules/
+
+# Ignore database file if you don't want to track it
+db.sqlite3
+
+# Ignore old project folder
+myplanner_old/

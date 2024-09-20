@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table, th, td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+td {
+    text-align: center;
+}
+
+/* General link styles */
+.link-container a {
+    color: #007bff; /* Default blue link color */
+    text-decoration: none;
+    margin-right: 10px; /* Add spacing between links */
+}
+
+.link-container a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+/* Aligning the links to the right */
+.link-container-right {
+    display: flex;
+    justify-content: flex-end; /* Moves the content to the right */
+    margin-right: 20px; /* Optional: Adds a margin from the right edge */
+}

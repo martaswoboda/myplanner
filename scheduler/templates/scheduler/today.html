@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <title>Today's Jobs</title>
+</head>
+<body>
+    <h1>Today's Jobs ({{ today|date:"F j, Y" }})</h1>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Duration</th>
+                <th>Urgency</th>
+                <th>Importance</th>
+                <th>Frog</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in jobs %}
+            <tr>
+                <td>{{ job.title }}</td>
+                <td>{% if job.start_time %}{{ job.start_time }}{% else %}Unscheduled{% endif %}</td>
+                <td>{% if job.end_time %}{{ job.end_time }}{% else %}Unscheduled{% endif %}</td>
+                <td>{{ job.duration_hours }} hours</td>
+                <td>{{ job.urgency }}</td>
+                <td>{{ job.importance }}</td>
+                <td>
+                    {% if job.is_frog %}
+                    <img src="{% static 'frog-icon.png' %}" alt="Frog Task" width="20" height="20">
+                    {% else %}
+                    Not Frog
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="link-container">
+                        <!-- Edit Link -->
+                        <a href="{% url 'edit_job' job.id %}">Edit</a>
+                        
+                        <!-- Delete Link -->
+                        <a href="{% url 'delete_job' job.id %}">Delete</a>
+                        
+                        <!-- Reset Link (needs to stay a form for POST request but will look like a link) -->
+                        <form method="POST" action="{% url 'reset_job' job.id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <a href="#" onclick="this.closest('form').submit(); return false;">Reset</a>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <a href="{% url 'weekly_plan_view' %}">Back to Weekly Plan</a>
+
+</body>
+</html>

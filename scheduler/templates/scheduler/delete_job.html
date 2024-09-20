@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <title>Confirm Delete</title>
+</head>
+<body>
+    <h1>Are you sure you want to delete "{{ job.title }}"?</h1>
+    <form method="POST" style="display:inline;">
+        {% csrf_token %}
+        <a href="#" onclick="this.closest('form').submit(); return false;">Yes, Delete</a>
+    </form>
+    <a href="{% url 'weekly_plan_view' %}">Cancel</a>
+</body>
+</html>
