@@ -2,8 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.weekly_plan_view, name='weekly_plan_view'),
-    path('today/', views.today_view, name='today'),  
+    path('', views.job_list, name='job_list'),  # job_list as the first page
+    path('weekly-view/', views.weekly_plan_view, name='weekly_plan_view'),  # for the weekly view
+    path('today/', views.today_view, name='today'),
     path('add-job/', views.add_job, name='add_job'),
     path('edit-job/<int:job_id>/', views.edit_job, name='edit_job'),
     path('delete-job/<int:job_id>/', views.delete_job, name='delete_job'),

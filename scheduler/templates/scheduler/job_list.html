@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">    
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <title>Weekly Plan ({{ start_of_week }} - {{ end_of_week }})</title>
+    <title>Unscheduled Jobs</title>
 </head>
 <body>
-    <h1>Week {{ start_of_week|date:"F j, Y" }} - {{ end_of_week|date:"F j, Y" }}</h1>
-    
-    <!-- Navigation for previous/next week -->
-    <div>
-        <a href="?week={{ week_offset|add:"-1" }}">Previous Week</a> |
-        <a href="?week={{ week_offset|add:"1" }}">Next Week</a>
-    </div>
-
+    <h1>Unscheduled Jobs</h1>
+    <ul>
+        {% for job in jobs %}
+        <li>{{ job.title }} - Unscheduled (No Start Time) on {{ job.date }}</li>
+        {% endfor %}
+    </ul>
     <table>
         <thead>
             <tr>
@@ -72,8 +70,14 @@
     </table>
    
     <div class="link-container">
-        <a href="{% url 'add_job' %}">Add a New Job</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{% url 'add_job' %}">Add a New Job</a>
+    <br><br>
 
+        <form method="POST" action="{% url 'schedule_all_jobs' %}" style="display: inline;">
+            {% csrf_token %}
+            <a href="#" onclick="this.closest('form').submit(); return false;">Schedule All Jobs</a>
+        </form>
+        &nbsp;&nbsp;&nbsp;&nbsp;
         <form method="POST" action="{% url 'reset_jobs' %}" style="display: inline;">
             {% csrf_token %}
             <a href="#" onclick="this.closest('form').submit(); return false;">Reset All Jobs</a>
@@ -81,7 +85,6 @@
     </div>
     <br>  
     <a href="{% url 'today' %}">View Today's Jobs</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="{% url 'job_list' %}">Back to Unscheduled Job List</a>
-    
+    <a href="{% url 'weekly_plan_view' %}">Go to Weekly View</a>
 </body>
 </html>

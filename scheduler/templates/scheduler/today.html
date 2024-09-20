@@ -60,9 +60,17 @@
             {% endfor %}
         </tbody>
     </table>
+    <div class="link-container">
+        <a href="{% url 'add_job' %}">Add a New Job</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-    <br>
-    <a href="{% url 'weekly_plan_view' %}">Back to Weekly Plan</a>
+        <form method="POST" action="{% url 'reset_jobs' %}" style="display: inline;">
+            {% csrf_token %}
+            <a href="#" onclick="this.closest('form').submit(); return false;">Reset All Jobs</a>
+        </form>
+    </div>
+    <br>  
+    <a href="{% url 'weekly_plan_view' %}">Back to Weekly Job List</a>&nbsp;&nbsp;&nbsp;
+    <a href="{% url 'job_list' %}">Back to Unscheduled Job List</a>
 
 </body>
 </html>

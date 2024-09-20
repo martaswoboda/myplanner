@@ -10,8 +10,15 @@ BLOCKED_TIME_START = time(16, 0)
 BLOCKED_TIME_END = time(19, 0)
 MAX_DAYS = 7 # Define max number of days ahead to schedule
 
-def index(request):
-    return job_list(request)
+def job_list(request):
+    # Fetch all jobs, both scheduled and unscheduled
+    jobs = Job.objects.all().order_by('date', 'start_time')
+
+    context = {
+        'jobs': jobs,
+    }
+    return render(request, 'scheduler/job_list.html', context)
+
 
 def get_week_dates(current_date):
     start_of_week = current_date - timedelta(days=current_date.weekday())
@@ -168,7 +175,7 @@ def schedule_jobs(jobs):
                         break  # Move to the next task once scheduled
 
             # Delete the original job if divided into smaller chunks
-            if task != job:
+            if job.id is not None:
                 job.delete()
 
 
@@ -183,11 +190,14 @@ def schedule_all_jobs(request):
         return redirect('job_list')
 
 def job_list(request):
-    # Sort jobs by start_time, with null values (unscheduled jobs) coming last
-    jobs = Job.objects.all().order_by('date', 'start_time')
-    for job in jobs:
-        job.priority = job.calculate_priority()  # Calculate the priority dynamically
-    return render(request, 'scheduler/index.html', {'jobs': jobs})
+    # Fetch only unscheduled jobs (where start_time is null)
+    jobs = Job.objects.filter(start_time__isnull=True).order_by('date')
+
+    context = {
+        'jobs': jobs,
+    }
+    return render(request, 'scheduler/job_list.html', context)
+
 
 
 

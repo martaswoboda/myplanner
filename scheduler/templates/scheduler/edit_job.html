@@ -9,11 +9,27 @@
 </head>
 <body>
     <h1>Edit Job</h1>
-    <form method="POST">
+    <!-- Assign the form an ID so it can be referenced in the script -->
+    <form method="POST" id="edit-job-form">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Save Changes</button>
+        
+        <p>
+            {{ form.title.label_tag }} {{ form.title }} <br>
+            {{ form.title.errors }}  <!-- This will render errors with the 'errorlist' class -->
+        </p>
+        
+        <p>
+            {{ form.date.label_tag }} {{ form.date }} <br>
+            {{ form.date.errors }}  <!-- This will render errors with the 'errorlist' class -->
+        </p>
+    
+        <a href="#" onclick="document.getElementById('edit-job-form').submit(); return false;">Save Changes</a>
     </form>
-    <a href="{% url 'job_list' %}">Back to Job List</a>
+    
+    <br><br>
+    
+    <a href="{% url 'weekly_plan_view' %}">Back to Weekly Job List</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="{% url 'job_list' %}">Back to Unscheduled Job List</a>
 </body>
 </html>

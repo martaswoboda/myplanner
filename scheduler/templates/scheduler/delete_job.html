@@ -12,8 +12,9 @@
     <h1>Are you sure you want to delete "{{ job.title }}"?</h1>
     <form method="POST" style="display:inline;">
         {% csrf_token %}
-        <a href="#" onclick="this.closest('form').submit(); return false;">Yes, Delete</a>
+        <a href="#" onclick="this.closest('form').submit(); return false;">Yes, Delete</a><br><br>
     </form>
-    <a href="{% url 'weekly_plan_view' %}">Cancel</a>
+    <a href="{% url 'weekly_plan_view' %}">Back to Weekly Job List</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="{% url 'job_list' %}">Back to Unscheduled Job List</a>
 </body>
 </html>
