@@ -12,15 +12,7 @@
     <form method="POST" style="display: inline;">
         {% csrf_token %}
         {{ form.as_p }}
-        <p>
-            {{ form.title.label_tag }} {{ form.title }} <br>
-            {{ form.title.errors }}  <!-- This will render errors with the 'errorlist' class -->
-        </p>
         
-        <p>
-            {{ form.date.label_tag }} {{ form.date }} <br>
-            {{ form.date.errors }}  <!-- This will render errors with the 'errorlist' class -->
-        </p>
         <a href="#" onclick="this.closest('form').submit(); return false;">Submit Job</a>
     </form>
     

@@ -15,6 +15,7 @@
         <a href="?week={{ week_offset|add:"1" }}">Next Week</a>
     </div>
 
+    <!-- Jobs table for scheduled jobs -->
     <table>
         <thead>
             <tr>
@@ -33,10 +34,10 @@
             {% for job in jobs %}
             <tr>
                 <td>{{ job.title }}</td>
-                <td>{% if job.start_time %}{{ job.start_time }}{% else %}Unscheduled{% endif %}</td>
-                <td>{% if job.end_time %}{{ job.end_time }}{% else %}Unscheduled{% endif %}</td>
+                <td>{{ job.start_time|date:"H:i" }}</td>
+                <td>{{ job.end_time|date:"H:i" }}</td>
                 <td>{{ job.duration_hours }} hours</td>
-                <td>{% if job.date %}{{ job.date }}{% else %}Unscheduled{% endif %}</td>
+                <td>{{ job.date|date:"Y-m-d" }}</td>
                 <td>{{ job.urgency }}</td>
                 <td>{{ job.importance }}</td>
                 <td>
@@ -48,32 +49,21 @@
                 </td>
                 <td>
                     <div class="link-container">
-                        <!-- Edit Link -->
                         <a href="{% url 'edit_job' job.id %}">Edit</a>
-                        
-                        <!-- Delete Link -->
                         <a href="{% url 'delete_job' job.id %}">Delete</a>
-                        
-                        <!-- Reset Link (needs to stay a form for POST request but will look like a link) -->
                         <form method="POST" action="{% url 'reset_job' job.id %}" style="display: inline;">
                             {% csrf_token %}
                             <a href="#" onclick="this.closest('form').submit(); return false;">Reset</a>
                         </form>
                     </div>
                 </td>
-                
-                
-                
-                
-                
             </tr>
             {% endfor %}
         </tbody>
     </table>
-   
+
     <div class="link-container">
         <a href="{% url 'add_job' %}">Add a New Job</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
         <form method="POST" action="{% url 'reset_jobs' %}" style="display: inline;">
             {% csrf_token %}
             <a href="#" onclick="this.closest('form').submit(); return false;">Reset All Jobs</a>

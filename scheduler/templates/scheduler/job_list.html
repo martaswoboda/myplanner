@@ -8,11 +8,7 @@
 </head>
 <body>
     <h1>Unscheduled Jobs</h1>
-    <ul>
-        {% for job in jobs %}
-        <li>{{ job.title }} - Unscheduled (No Start Time) on {{ job.date }}</li>
-        {% endfor %}
-    </ul>
+
     <table>
         <thead>
             <tr>
@@ -59,11 +55,6 @@
                         </form>
                     </div>
                 </td>
-                
-                
-                
-                
-                
             </tr>
             {% endfor %}
         </tbody>
