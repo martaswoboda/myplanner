@@ -7,7 +7,7 @@ from decimal import Decimal
 
 # Constants for working hours and blocked times
 START_TIME = time(7, 0)          # 7:00 AM
-END_TIME = time(19, 0)           # 7:00 PM
+END_TIME = time(16, 0)           # 4:00 PM
 BLOCKED_TIME_START = time(12, 0) # 12:00 PM
 BLOCKED_TIME_END = time(13, 0)   # 1:00 PM
 MAX_DAYS = 30                    # Maximum number of days to look ahead for scheduling
@@ -44,11 +44,37 @@ def weekly_plan_view(request):
     return render(request, 'scheduler/index.html', context)
 
 def today_view(request):
-    # Filter jobs for today's date and order by start_time
+    current_time = datetime.now().time()  # Get the current time
     today_jobs = Job.objects.filter(date=date.today()).order_by('start_time')
+
+    for job in today_jobs:
+        # If the job's end time has passed and it's not completed, mark it as unscheduled
+        if job.end_time and job.end_time < current_time and not job.completed:
+            job.start_time = None
+            job.end_time = None
+            job.date = None
+            job.save()
+
+        # Add attributes to determine if the job is overdue or close to overdue
+        if job.end_time and job.end_time < current_time and not job.completed:
+            job.is_overdue = True
+        elif job.end_time and (datetime.combine(date.today(), job.end_time) - datetime.now()).total_seconds() < 3600 and not job.completed:
+            job.is_close_to_overdue = True
+        else:
+            job.is_overdue = False
+            job.is_close_to_overdue = False
+
+    if request.method == 'POST':
+        job_id = request.POST.get('job_id')
+        job = Job.objects.get(id=job_id)
+        job.completed = True
+        job.save()
+        return redirect('today')
+
     context = {
         'jobs': today_jobs,
-        'today': date.today()
+        'today': date.today(),
+        'current_time': current_time,
     }
     return render(request, 'scheduler/today.html', context)
 
@@ -325,6 +351,16 @@ def schedule_all_jobs(request):
     else:
         return redirect('job_list')
 
+def schedule_single_job(request, job_id):
+    job = get_object_or_404(Job, id=job_id)
+
+    if request.method == 'POST':
+        # Schedule this single job using the existing scheduling logic
+        schedule_jobs([job])
+        return redirect('job_list')
+    
+    return redirect('job_list')
+
 
 def add_job(request):
     if request.method == 'POST':
@@ -391,3 +427,13 @@ def reset_jobs(request):
         return redirect('job_list')
     else:
         return redirect('job_list')
+
+def complete_job(request, job_id):
+    job = get_object_or_404(Job, id=job_id)
+    if request.method == 'POST':
+        # Mark the job as completed
+        job.completed = True
+        job.save()
+        return redirect('today')
+    return redirect('today')
+

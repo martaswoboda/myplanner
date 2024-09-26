@@ -24,7 +24,12 @@
         </thead>
         <tbody>
             {% for job in jobs %}
-            <tr>
+            <tr 
+                {% if job.completed %} style="background-color: #d4edda;" 
+                {% elif job.is_overdue %} style="background-color: #f8d7da;" 
+                {% elif job.is_close_to_overdue %} style="background-color: #fff3cd;" 
+                {% endif %}
+            >
                 <td>{{ job.title }}</td>
                 <td>{% if job.start_time %}{{ job.start_time|date:"H:i" }}{% else %}Unscheduled{% endif %}</td>
                 <td>{% if job.end_time %}{{ job.end_time|date:"H:i" }}{% else %}Unscheduled{% endif %}</td>
@@ -48,9 +53,19 @@
                         </form>
                     </div>
                 </td>
+                <td>
+                    <form method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="job_id" value="{{ job.id }}">
+                        <input type="checkbox" name="completed" onchange="this.form.submit()" {% if job.completed %}checked{% endif %}> Completed
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
+        
+        
+        
     </table>
 
     <div class="link-container">

@@ -53,6 +53,11 @@
                             {% csrf_token %}
                             <a href="#" onclick="this.closest('form').submit(); return false;">Reset</a>
                         </form>
+                         <!-- Schedule Link (needs to stay a form for POST request but will look like a link) -->
+                        <form method="POST" action="{% url 'schedule_single_job' job.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <a href="#" onclick="this.closest('form').submit(); return false;">Schedule</a>
+        </form>
                     </div>
                 </td>
             </tr>

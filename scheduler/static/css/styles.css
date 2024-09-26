@@ -64,3 +64,15 @@ input.is-invalid, select.is-invalid, textarea.is-invalid {
 label.error {
     color: red;
 }
+
+.completed-job {
+    background-color: #d4edda;
+}
+
+.overdue-job {
+    background-color: #f8d7da;
+}
+
+.close-to-overdue-job {
+    background-color: #fff3cd;
+}

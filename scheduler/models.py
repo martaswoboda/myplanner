@@ -12,6 +12,7 @@ class Job(models.Model):
     importance = models.IntegerField(choices=[(1, 'Low'), (2, 'Medium'), (3, 'High')], default=2)
     can_be_divided = models.BooleanField(default=False)
     duration_hours = models.DecimalField(max_digits=4, decimal_places=2, default=1)
+    completed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
