@@ -422,11 +422,27 @@ def reset_job(request, job_id):
 
 def reset_jobs(request):
     if request.method == 'POST':
+<<<<<<< HEAD
         # Reset start_time, end_time, and date for all jobs
         Job.objects.all().update(start_time=None, end_time=None, date=None)
         return redirect('job_list')
     else:
         return redirect('job_list')
+=======
+        # Perform the actual reset
+        Job.objects.all().update(start_time=None, end_time=None, date=None)
+        return redirect('job_list')
+    else:
+        # Show the confirmation page
+        return render(request, 'scheduler/reset_all.html')
+# views.py
+
+def reset_jobs_confirm(request):
+    if request.method == 'POST':
+        return redirect('reset_jobs')  # Redirect to the actual reset view after confirmation
+
+    return render(request, 'scheduler/reset_all.html')  # Renders the reset confirmation page
+>>>>>>> e685cf0 (Added reset jobs confirmation and updated templates for reset logic)
 
 def complete_job(request, job_id):
     job = get_object_or_404(Job, id=job_id)

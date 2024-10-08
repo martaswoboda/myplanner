@@ -2,13 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
     
+=======
+>>>>>>> e685cf0 (Added reset jobs confirmation and updated templates for reset logic)
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <title>Edit Job</title>
 </head>
 <body>
     <h1>Edit Job</h1>
+<<<<<<< HEAD
     <!-- Assign the form an ID so it can be referenced in the script -->
     <form method="POST" id="edit-job-form">
         {% csrf_token %}
@@ -30,6 +34,61 @@
     <br><br>
     
     <a href="{% url 'weekly_plan_view' %}">Back to Weekly Job List</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=======
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        <p>
+            {{ form.title.label_tag }} {{ form.title }}
+            {{ form.title.errors }}  
+        </p>
+        <p>
+            {{ form.description.label_tag }} {{ form.description }}
+            {{ form.description.errors }}
+        </p>
+        <p>
+            {{ form.date.label_tag }} {{ form.date }}
+            {{ form.date.errors }}
+        </p>
+        <p>
+            {{ form.start_time.label_tag }} {{ form.start_time }}
+            {{ form.start_time.errors }}
+        </p>
+        <p>
+            {{ form.due_date.label_tag }} {{ form.due_date }}
+            {{ form.due_date.errors }}
+        </p>
+        <p>
+            {{ form.duration_hours.label_tag }} {{ form.duration_hours }}
+            {{ form.duration_hours.errors }}
+        </p>
+        <p>
+            {{ form.is_frog.label_tag }} {{ form.is_frog }}
+            {{ form.is_frog.errors }}
+        </p>
+        <p>
+            {{ form.urgency.label_tag }} {{ form.urgency }}
+            {{ form.urgency.errors }}
+        </p>
+        <p>
+            {{ form.importance.label_tag }} {{ form.importance }}
+            {{ form.importance.errors }}
+        </p>
+        <p>
+            {{ form.can_be_divided.label_tag }} {{ form.can_be_divided }}
+            {{ form.can_be_divided.errors }}
+        </p>
+        <p>
+            {{ form.unspecific_time.label_tag }} {{ form.unspecific_time }}
+            {{ form.unspecific_time.errors }}
+        </p>
+
+        <button type="submit">Save</button>
+    </form>
+
+    <br><br>
+>>>>>>> e685cf0 (Added reset jobs confirmation and updated templates for reset logic)
     <a href="{% url 'job_list' %}">Back to Unscheduled Job List</a>
 </body>
 </html>

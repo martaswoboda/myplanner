@@ -20,6 +20,10 @@
                 <th>Importance</th>
                 <th>Frog</th>
                 <th>Actions</th>
+<<<<<<< HEAD
+=======
+                <th>Completed</th>
+>>>>>>> e685cf0 (Added reset jobs confirmation and updated templates for reset logic)
             </tr>
         </thead>
         <tbody>
@@ -45,12 +49,17 @@
                 </td>
                 <td>
                     <div class="link-container">
+<<<<<<< HEAD
                         <a href="{% url 'edit_job' job.id %}">Edit</a>
                         <a href="{% url 'delete_job' job.id %}">Delete</a>
                         <form method="POST" action="{% url 'reset_job' job.id %}" style="display: inline;">
                             {% csrf_token %}
                             <a href="#" onclick="this.closest('form').submit(); return false;">Reset</a>
                         </form>
+=======
+                        <a href="{% url 'edit_job' job.id %}">Edit</a>&nbsp;&nbsp;
+                        <a href="{% url 'delete_job' job.id %}">Delete</a>
+>>>>>>> e685cf0 (Added reset jobs confirmation and updated templates for reset logic)
                     </div>
                 </td>
                 <td>
@@ -63,6 +72,7 @@
             </tr>
             {% endfor %}
         </tbody>
+<<<<<<< HEAD
         
         
         
@@ -73,6 +83,13 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <form method="POST" action="{% url 'reset_jobs' %}" style="display: inline;">
             {% csrf_token %}
+=======
+    </table>
+
+    <div class="link-container">
+        <a href="{% url 'add_job' %}">Add a New Job</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <form method="GET" action="{% url 'reset_jobs_confirm' %}" style="display: inline;">
+>>>>>>> e685cf0 (Added reset jobs confirmation and updated templates for reset logic)
             <a href="#" onclick="this.closest('form').submit(); return false;">Reset All Jobs</a>
         </form>
     </div>
