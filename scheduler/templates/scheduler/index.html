@@ -64,21 +64,14 @@
 
     <div class="link-container">
         <a href="{% url 'add_job' %}">Add a New Job</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<<<<<<< HEAD
-        <form method="POST" action="{% url 'reset_jobs' %}" style="display: inline;">
-=======
         <form method="POST" action="{% url 'reset_jobs_confirm' %}" style="display: inline;">
->>>>>>> e685cf0 (Added reset jobs confirmation and updated templates for reset logic)
             {% csrf_token %}
             <a href="#" onclick="this.closest('form').submit(); return false;">Reset All Jobs</a>
         </form>
     </div>
-<<<<<<< HEAD
-=======
     
 
     
->>>>>>> e685cf0 (Added reset jobs confirmation and updated templates for reset logic)
     <br>  
     <a href="{% url 'today' %}">View Today's Jobs</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="{% url 'job_list' %}">Back to Unscheduled Job List</a>

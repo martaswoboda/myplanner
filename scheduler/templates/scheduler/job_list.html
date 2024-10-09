@@ -74,18 +74,11 @@
             <a href="#" onclick="this.closest('form').submit(); return false;">Schedule All Jobs</a>
         </form>
         &nbsp;&nbsp;&nbsp;&nbsp;
-<<<<<<< HEAD
-        <form method="POST" action="{% url 'reset_jobs' %}" style="display: inline;">
-            {% csrf_token %}
-            <a href="#" onclick="this.closest('form').submit(); return false;">Reset All Jobs</a>
-        </form>
-=======
         <form method="POST" action="{% url 'reset_jobs_confirm' %}" style="display:inline;">
             {% csrf_token %}
             <a href="#" onclick="this.closest('form').submit(); return false;">Reset All Jobs</a>
         </form>
         
->>>>>>> e685cf0 (Added reset jobs confirmation and updated templates for reset logic)
     </div>
     <br>  
     <a href="{% url 'today' %}">View Today's Jobs</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

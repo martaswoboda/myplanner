@@ -12,10 +12,8 @@ urlpatterns = [
     path('schedule-job/<int:job_id>/', views.schedule_single_job, name='schedule_single_job'),
     path('reset-job/<int:job_id>/', views.reset_job, name='reset_job'),
     path('reset-jobs/', views.reset_jobs, name='reset_jobs'),
-<<<<<<< HEAD
-=======
-    path('reset-jobs-confirm/', views.reset_jobs_confirm, name='reset_jobs_confirm'),
->>>>>>> e685cf0 (Added reset jobs confirmation and updated templates for reset logic)
     path('complete-job/<int:job_id>/', views.complete_job, name='complete_job'),
+    path('reset_jobs_confirm/', views.reset_jobs_confirm, name='reset_jobs_confirm'),
+
 
 ]
