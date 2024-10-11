@@ -11,6 +11,8 @@ This project is a task scheduling and prioritization tool designed to help you m
 - **Unscheduled Jobs**: View and manage jobs that haven’t been scheduled yet.
 - **Job Scheduling**: Automatically schedule jobs based on priority (ABC method), importance, and time availability.
 - **Mark Jobs as Completed**: Easily mark jobs as completed from the daily job list.
+- **Swap Job Times**: Switch the scheduled times between two jobs for better flexibility.
+- **Day Navigation**: Navigate through previous and next day views for easier task management.
 - **Color Coding for Overdue Tasks**:
   - Green: Completed tasks.
   - Yellow: Tasks nearing their deadline (within 1 hour).
