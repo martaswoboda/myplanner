@@ -66,17 +66,17 @@
     </table>
    
     <div class="link-container">
-        <a href="{% url 'add_job' %}">Add a New Job</a>
+        <a href="{% url 'add_job' %}"><u>Add a New Job</u></a>
     <br><br>
 
         <form method="POST" action="{% url 'schedule_all_jobs' %}" style="display: inline;">
             {% csrf_token %}
-            <a href="#" onclick="this.closest('form').submit(); return false;">Schedule All Jobs</a>
+            <a href="#" onclick="this.closest('form').submit(); return false;"><u>Schedule All Jobs</u></a>
         </form>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <form method="POST" action="{% url 'reset_jobs_confirm' %}" style="display:inline;">
             {% csrf_token %}
-            <a href="#" onclick="this.closest('form').submit(); return false;">Reset All Jobs</a>
+            <a href="#" onclick="this.closest('form').submit(); return false;"><u>Reset All Jobs</u></a>
         </form>
         
     </div>

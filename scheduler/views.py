@@ -8,9 +8,12 @@ from decimal import Decimal
 # Constants for working hours and blocked times
 START_TIME = time(7, 0)          # 7:00 AM
 END_TIME = time(16, 0)           # 4:00 PM
-BLOCKED_TIME_START = time(12, 0) # 12:00 PM
-BLOCKED_TIME_END = time(13, 0)   # 1:00 PM
+BLOCKED_TIMES = [
+    (time(9, 0), time(9, 30)),   # 9:00 AM - 9:30 AM
+    (time(12, 0), time(13, 0))   # 12:00 PM - 1:00 PM
+]
 MAX_DAYS = 30                    # Maximum number of days to look ahead for scheduling
+
 
 def job_list(request):
     # Fetch only unscheduled jobs (where both date and start_time are null)
@@ -44,26 +47,25 @@ def weekly_plan_view(request):
     return render(request, 'scheduler/index.html', context)
 
 def today_view(request):
+    # Get the day offset for navigating (default to 0 for today)
+    day_offset = int(request.GET.get('day', 0))
+    current_date = datetime.now().date() + timedelta(days=day_offset)
     current_time = datetime.now().time()  # Get the current time
-    today_jobs = Job.objects.filter(date=date.today()).order_by('start_time')
 
+    # Fetch jobs for the current date
+    today_jobs = Job.objects.filter(date=current_date).order_by('start_time')
+
+    # Mark jobs as overdue or close to overdue based on the current time
     for job in today_jobs:
-        # If the job's end time has passed and it's not completed, mark it as unscheduled
-        if job.end_time and job.end_time < current_time and not job.completed:
-            job.start_time = None
-            job.end_time = None
-            job.date = None
-            job.save()
-
-        # Add attributes to determine if the job is overdue or close to overdue
         if job.end_time and job.end_time < current_time and not job.completed:
             job.is_overdue = True
-        elif job.end_time and (datetime.combine(date.today(), job.end_time) - datetime.now()).total_seconds() < 3600 and not job.completed:
+        elif job.end_time and (datetime.combine(current_date, job.end_time) - datetime.now()).total_seconds() < 3600 and not job.completed:
             job.is_close_to_overdue = True
         else:
             job.is_overdue = False
             job.is_close_to_overdue = False
 
+    # Handle marking jobs as completed
     if request.method == 'POST':
         job_id = request.POST.get('job_id')
         job = Job.objects.get(id=job_id)
@@ -73,10 +75,12 @@ def today_view(request):
 
     context = {
         'jobs': today_jobs,
-        'today': date.today(),
+        'today': current_date,
         'current_time': current_time,
+        'day_offset': day_offset,  # Pass the day offset for navigation
     }
     return render(request, 'scheduler/today.html', context)
+
 
 def is_time_available(day):
     # Block weekends
@@ -143,12 +147,12 @@ def get_available_time_slots(day, scheduled_intervals):
     # Start with the full working day as an available slot
     available_slots = [(day_start, day_end)]
 
-    # Include blocked times (e.g., lunch break)
-    blocked_start = datetime.combine(day, BLOCKED_TIME_START)
-    blocked_end = datetime.combine(day, BLOCKED_TIME_END)
-
-    # Add blocked time to scheduled intervals
-    all_scheduled = scheduled_intervals + [(blocked_start, blocked_end)]
+    # Include all blocked times
+    all_scheduled = scheduled_intervals[:]
+    for blocked_start_time, blocked_end_time in BLOCKED_TIMES:
+        blocked_start = datetime.combine(day, blocked_start_time)
+        blocked_end = datetime.combine(day, blocked_end_time)
+        all_scheduled.append((blocked_start, blocked_end))
 
     # Sort all scheduled intervals
     all_scheduled.sort(key=lambda x: x[0])
@@ -422,13 +426,23 @@ def reset_job(request, job_id):
 
 def reset_jobs(request):
     if request.method == 'POST':
-        # Perform the actual reset
-        Job.objects.all().update(start_time=None, end_time=None, date=None)
+        # Get the current date
+        current_date = datetime.now().date()
+        
+        # Calculate the start and end of the current week
+        start_of_week = current_date - timedelta(days=current_date.weekday())  # Monday
+        end_of_week = start_of_week + timedelta(days=6)  # Sunday
+        
+        # Perform the reset only for jobs within the current week
+        Job.objects.filter(date__range=[start_of_week, end_of_week]).update(
+            start_time=None,
+            end_time=None,
+            date=None
+        )
         return redirect('job_list')
     else:
         # Show the confirmation page
         return render(request, 'scheduler/reset_all.html')
-# views.py
 
 def reset_jobs_confirm(request):
     if request.method == 'POST':
@@ -445,3 +459,31 @@ def complete_job(request, job_id):
         return redirect('today')
     return redirect('today')
 
+from django.shortcuts import redirect
+from .models import Job
+
+def swap_jobs(request):
+    if request.method == 'POST':
+        job1_id = request.POST.get('job1')
+        job2_id = request.POST.get('job2')
+
+        # Fetch the two jobs
+        job1 = Job.objects.get(id=job1_id)
+        job2 = Job.objects.get(id=job2_id)
+
+        # Swap their start and end times
+        job1_start_time, job1_end_time = job1.start_time, job1.end_time
+        job2_start_time, job2_end_time = job2.start_time, job2.end_time
+
+        job1.start_time, job1.end_time = job2_start_time, job2_end_time
+        job2.start_time, job2.end_time = job1_start_time, job1_end_time
+
+        # Save the changes
+        job1.save()
+        job2.save()
+
+        # Redirect back to today's jobs
+        return redirect('today')
+
+    # If not a POST request, just redirect to today's view
+    return redirect('today')

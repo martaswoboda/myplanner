@@ -7,7 +7,13 @@
     <title>Today's Jobs</title>
 </head>
 <body>
-    <h1>Today's Jobs ({{ today|date:"F j, Y" }})</h1>
+    <h1>Today's Jobs ({{ today|date:"l, F j Y" }})</h1>
+    <!-- Navigation for previous/next day -->
+<div style="margin-bottom: 20px;">
+    <a href="?day={{ day_offset|add:"-1" }}">Previous Day</a> |
+    <a href="?day={{ day_offset|add:"1" }}">Next Day</a>
+</div>
+
 
     <table>
         <thead>
@@ -18,6 +24,7 @@
                 <th>Duration</th>
                 <th>Urgency</th>
                 <th>Importance</th>
+                <th>Priority</th>
                 <th>Frog</th>
                 <th>Actions</th>
                 <th>Completed</th>
@@ -37,6 +44,7 @@
                 <td>{{ job.duration_hours }} hours</td>
                 <td>{{ job.urgency }}</td>
                 <td>{{ job.importance }}</td>
+                <td>{{ job.calculate_priority }}</td>
                 <td>
                     {% if job.is_frog %}
                     <img src="{% static 'frog-icon.png' %}" alt="Frog Task" width="20" height="20">
@@ -48,6 +56,10 @@
                     <div class="link-container">
                         <a href="{% url 'edit_job' job.id %}">Edit</a>&nbsp;&nbsp;
                         <a href="{% url 'delete_job' job.id %}">Delete</a>
+                        <form method="POST" action="{% url 'reset_job' job.id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <a href="#" onclick="this.closest('form').submit(); return false;">Reset</a>
+                        </form>
                     </div>
                 </td>
                 <td>
@@ -62,15 +74,45 @@
         </tbody>
     </table>
 
+    
     <div class="link-container">
-        <a href="{% url 'add_job' %}">Add a New Job</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{% url 'add_job' %}"><u>Add a New Job</u></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <form method="GET" action="{% url 'reset_jobs_confirm' %}" style="display: inline;">
-            <a href="#" onclick="this.closest('form').submit(); return false;">Reset All Jobs</a>
+            <a href="#" onclick="this.closest('form').submit(); return false;"><u>Reset All Jobs</u></a>
         </form>
     </div>
     <br>  
     <a href="{% url 'weekly_plan_view' %}">Back to Weekly Job List</a>&nbsp;&nbsp;&nbsp;
     <a href="{% url 'job_list' %}">Back to Unscheduled Job List</a>
+<br><br>
+
+<div class="swap-jobs-frame">
+    <h2>Swap Job Times</h2>
+    <p>If you want to swap the times of two jobs, select them from the dropdowns below and click "Swap Jobs". This will exchange their start and end times.</p>
+    <form method="POST" action="{% url 'swap_jobs' %}">
+        {% csrf_token %}
+        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
+            <label for="job1"><i>Select First Job:</i></label>
+            <select name="job1" id="job1">
+                {% for job in jobs %}
+                <option value="{{ job.id }}">{{ job.title }} ({{ job.start_time|date:"H:i" }} - {{ job.end_time|date:"H:i" }})</option>
+                {% endfor %}
+            </select>
+
+            <label for="job2"><i>Select Second Job:</i></label>
+            <select name="job2" id="job2">
+                {% for job in jobs %}
+                <option value="{{ job.id }}">{{ job.title }} ({{ job.start_time|date:"H:i" }} - {{ job.end_time|date:"H:i" }})</option>
+                {% endfor %}
+            </select>
+
+            <div class="link-container">
+                <a href="#" onclick="this.closest('form').submit(); return false;"><u>Swap Jobs</u></a>
+            </div>
+        </div>
+    </form>
+</div>
+
 
 </body>
 </html>

@@ -26,6 +26,7 @@
                 <th>Date</th>
                 <th>Urgency</th>
                 <th>Importance</th>
+                <th>Priority</th>
                 <th>Frog</th>
                 <th>Actions</th>
             </tr>
@@ -40,6 +41,7 @@
                 <td>{{ job.date|date:"Y-m-d" }}</td>
                 <td>{{ job.urgency }}</td>
                 <td>{{ job.importance }}</td>
+                <td>{{ job.calculate_priority }}</td>
                 <td>
                     {% if job.is_frog %}
                     <img src="{% static 'frog-icon.png' %}" alt="Frog Task" width="20" height="20"> 
@@ -63,18 +65,18 @@
     </table>
 
     <div class="link-container">
-        <a href="{% url 'add_job' %}">Add a New Job</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{% url 'add_job' %}"><u>Add a New Job</u></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <form method="POST" action="{% url 'reset_jobs_confirm' %}" style="display: inline;">
             {% csrf_token %}
-            <a href="#" onclick="this.closest('form').submit(); return false;">Reset All Jobs</a>
+            <a href="#" onclick="this.closest('form').submit(); return false;"><u>Reset All Jobs</u></a>
         </form>
     </div>
     
 
     
     <br>  
-    <a href="{% url 'today' %}">View Today's Jobs</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="{% url 'job_list' %}">Back to Unscheduled Job List</a>
+    <a href="{% url 'today' %}"><u>View Today's Jobs</u></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="{% url 'job_list' %}"><u>Back to Unscheduled Job List</u></a>
     
 </body>
 </html>

@@ -76,3 +76,18 @@ label.error {
 .close-to-overdue-job {
     background-color: #fff3cd;
 }
+
+.swap-jobs-frame {
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.swap-jobs-frame h2 {
+    margin-top: 0;
+}
+.swap-jobs-frame .link-container {
+    margin-top: 10px;
+}
